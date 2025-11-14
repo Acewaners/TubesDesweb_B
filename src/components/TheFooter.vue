@@ -38,11 +38,12 @@ defineOptions({
           <h4 class="text-base md:text-lg font-bold text-white mb-4 md:mb-6">Support</h4>
           <div class="space-y-2 md:space-y-3 text-sm text-white/90">
             <p class="leading-relaxed">
-              111 Bijoy sarani, Dhaka,<br />
-              DH 1515, Bangladesh.
+              Sumber Rejo, Kariangau,<br />
+              Balikpapan Utara, Kalimantan Timur.
             </p>
-            <p>exclusive@gmail.com</p>
-            <p>+88015-88888-9999</p>
+
+            <p>hariyatunnasifa@gmail.com</p>
+            <p>0852-4666-4332</p>
           </div>
         </div>
 
@@ -91,7 +92,7 @@ defineOptions({
       <!-- Copyright -->
       <div class="border-t border-white/20 mt-8 md:mt-10 lg:mt-12 pt-6 md:pt-8">
         <p class="text-center text-xs md:text-sm text-white/80">
-          © Copyright Rimel 2022. All right reserved
+          © Copyright Sifa 2025. All right reserved
         </p>
       </div>
     </div>

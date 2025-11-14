@@ -38,7 +38,7 @@ defineOptions({
           <!-- Right Side: iPhone Image -->
           <div class="flex items-end justify-center lg:justify-end relative pb-0 lg:pb-0">
             <img
-              src="@/assets/iphone.png"
+              src="/iphone.png"
               alt="iPhone 14"
               class="w-auto h-[350px] lg:h-[450px] xl:h-[520px] object-contain drop-shadow-2xl"
             />

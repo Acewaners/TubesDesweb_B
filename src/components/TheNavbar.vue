@@ -31,7 +31,7 @@ const closeMobileMenu = () => {
       <div class="flex justify-between items-center h-20">
         <!-- Logo - Left -->
         <div class="flex items-center gap-3 shrink-0">
-          <img src="@/assets/logo.png" alt="Emotix Logo" class="h-8 w-8 object-contain" />
+          <img src="/logo.png" alt="Emotix Logo" class="h-8 w-8 object-contain" />
           <RouterLink to="/" class="text-xl font-semibold text-black tracking-tight">
             Emotix
           </RouterLink>

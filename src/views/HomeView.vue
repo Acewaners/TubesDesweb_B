@@ -1,5 +1,6 @@
 <script setup>
 import HeroSection from '@/components/HeroSection.vue'
+import HomeOverviewSection from '@/components/HomeOverviewSection.vue'
 </script>
 
 <template>
@@ -7,10 +8,8 @@ import HeroSection from '@/components/HeroSection.vue'
     <!-- Hero Section -->
     <HeroSection />
 
-    <!-- Other sections can be added here -->
-    <div class="container mx-auto px-4 py-12">
-      <!-- Additional content -->
-    </div>
+    <!-- Overview Section -->
+    <HomeOverviewSection />
   </div>
 </template>
 

@@ -81,12 +81,15 @@ const closeMobileMenu = () => {
         <div class="flex items-center gap-6">
           <!-- Desktop Icons -->
           <div class="hidden lg:flex items-center gap-6">
-            <button class="text-black hover:text-gray-600 transition-colors" aria-label="Wishlist">
+            <button
+              class="text-black hover:text-gray-600 cursor-pointer transition-colors"
+              aria-label="Wishlist"
+            >
               <HeartIcon class="w-6 h-6" />
             </button>
 
             <button
-              class="relative text-black hover:text-gray-600 transition-colors"
+              class="relative text-black hover:text-gray-600 cursor-pointer transition-colors"
               aria-label="Cart"
             >
               <ShoppingCartIcon class="w-6 h-6" />
@@ -97,7 +100,10 @@ const closeMobileMenu = () => {
               </span>
             </button>
 
-            <button class="text-black hover:text-gray-600 transition-colors" aria-label="Account">
+            <button
+              class="text-black hover:text-gray-600 cursor-pointer transition-colors"
+              aria-label="Account"
+            >
               <UserIcon class="w-6 h-6" />
             </button>
           </div>

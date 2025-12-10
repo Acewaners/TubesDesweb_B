@@ -1,10 +1,14 @@
 <script setup>
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { CheckCircleIcon } from '@heroicons/vue/24/outline'
 
 defineOptions({
   name: 'PaymentSuccessCard',
 })
+
+// router buat pindah halaman
+const router = useRouter()
 
 // Ambil data order terakhir dari localStorage (kalau ada)
 let storedOrder = null
@@ -22,29 +26,64 @@ const paymentMethod = computed(
   () => (storedOrder?.method ?? 'QRIS').toUpperCase(),
 )
 
-const paymentDate = computed(
-  () =>
-    storedOrder?.date ??
-    new Date().toLocaleDateString('id-ID', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    }),
-)
+// Payment date (force English format & fallback-safe)
+const paymentDate = computed(() => {
+  let dateObj
+
+  if (storedOrder?.date && !isNaN(Date.parse(storedOrder.date))) {
+    dateObj = new Date(storedOrder.date)
+  } else {
+    dateObj = new Date()
+  }
+
+  return dateObj.toLocaleDateString('en-US', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
+})
+
+// Estimated delivery (+7 days)
+const estimatedDelivery = computed(() => {
+  let dateObj
+
+  if (storedOrder?.date && !isNaN(Date.parse(storedOrder.date))) {
+    dateObj = new Date(storedOrder.date)
+  } else {
+    dateObj = new Date()
+  }
+
+  const deliveryDate = new Date(dateObj.getTime() + 7 * 24 * 60 * 60 * 1000)
+
+  return deliveryDate.toLocaleDateString('en-US', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
+})
 
 const totalPaid = computed(
   () => storedOrder?.totalFormatted ?? 'Rp 29.018.400',
 )
+
+// ====== BUTTON HANDLERS ======
+
+// Dummy download invoice – jelasin ke user kalau ini cuma demo front-end
+const onDownloadInvoice = () => {
+  alert(
+    'Invoice download is not available in this demo version because the app is front-end only (no backend to generate a real invoice).'
+  )
+}
+
+// Track Order → halaman My Orders
+const goToOrders = () => {
+  router.push('/orders')
+}
 </script>
 
 <template>
   <div class="bg-gray-100 min-h-[calc(100vh-5rem)] py-10">
     <div class="max-w-3xl mx-auto">
-      <!-- Header kecil -->
-      <h1 class="text-sm font-semibold text-gray-500 mb-4">
-        Payment Sukses
-      </h1>
-
       <!-- Card utama -->
       <div class="bg-white rounded-lg shadow-sm border border-gray-200">
         <!-- Top: icon + pesan sukses -->
@@ -105,7 +144,7 @@ const totalPaid = computed(
               Estimated Delivery
             </p>
             <p class="text-gray-600">
-              Your order will arrive by 8 November 2025.
+              Your order will arrive by {{ estimatedDelivery }}.
               <br />
               We will send you a tracking number once your order is shipped.
             </p>
@@ -117,10 +156,6 @@ const totalPaid = computed(
               What's Next?
             </p>
             <ul class="space-y-1">
-              <li class="flex items-start gap-2">
-                <span class="mt-0.5 text-green-500">✔</span>
-                <span>Order confirmation has been sent to your email.</span>
-              </li>
               <li class="flex items-start gap-2">
                 <span class="mt-0.5 text-green-500">✔</span>
                 <span>We're preparing your items for shipment.</span>
@@ -137,12 +172,14 @@ const totalPaid = computed(
             <button
               type="button"
               class="w-full border border-gray-300 rounded-md px-4 py-2 text-xs md:text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              @click="onDownloadInvoice"
             >
               Download Invoice
             </button>
             <button
               type="button"
               class="w-full border border-gray-300 rounded-md px-4 py-2 text-xs md:text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              @click="goToOrders"
             >
               Track Order
             </button>
@@ -158,12 +195,6 @@ const totalPaid = computed(
               Back to Home
             </RouterLink>
 
-            <RouterLink
-              to="/"
-              class="w-full text-center rounded-md px-4 py-2 text-xs md:text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors"
-            >
-              Continue Shopping
-            </RouterLink>
           </div>
 
           <p class="text-[11px] md:text-xs text-gray-500 text-center pt-4 pb-2">

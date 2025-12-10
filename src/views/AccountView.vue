@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import AccountProfileForm from '@/components/account/AccountProfileForm.vue'
 import { authState } from '@/stores/authStore'
 
@@ -13,7 +13,6 @@ const firstName = computed({
     const full = authState.userName || ''
     if (!full) return ''
     const parts = full.split(' ').filter(Boolean)
-    // kalau ada lebih dari satu kata → semua kecuali kata terakhir = first name
     if (parts.length > 1) return parts.slice(0, parts.length - 1).join(' ')
     return parts[0] || ''
   },
@@ -27,7 +26,6 @@ const lastName = computed({
   get() {
     const full = authState.userName || ''
     const parts = full.split(' ').filter(Boolean)
-    // ambil kata terakhir kalau ada
     return parts.length > 1 ? parts[parts.length - 1] : ''
   },
   set(val) {
@@ -38,7 +36,28 @@ const lastName = computed({
 
 // ====== Email & Address ======
 const email = computed(() => authState.email || '')
-const address = computed(() => '') // kosong dulu, bisa diisi manual nanti
+const address = ref('')
+
+// ambil data billing terakhir (kalau disimpan)
+onMounted(() => {
+  try {
+    const raw = localStorage.getItem('emotix_billing')
+    if (!raw) return
+
+    const billing = JSON.parse(raw)
+    if (!billing || billing.saveInfo === false) return
+
+    // Gabungkan street + apartment + city jadi 1 string address
+    const parts = [
+      billing.streetAddress,
+      billing.apartment,
+      billing.city,
+    ].filter(Boolean)
+    if (parts.length > 0) address.value = parts.join(', ')
+  } catch (err) {
+    console.error('[AccountView] Failed to load emotix_billing', err)
+  }
+})
 
 // ====== Display name di bagian atas ======
 const displayName = computed(() => {
@@ -49,7 +68,6 @@ const displayName = computed(() => {
 
 <template>
   <div class="bg-gray-50 min-h-screen">
-    <!-- layout sama kayak My Orders -->
     <div class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-10 space-y-4">
       <h1 class="text-2xl md:text-3xl font-bold text-gray-900">
         Manage My Account

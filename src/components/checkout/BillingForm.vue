@@ -1,4 +1,11 @@
 <script setup>
+import { onMounted, watch } from 'vue'
+import { authState } from '@/stores/authStore' // <--- tambahkan ini
+
+defineOptions({
+  name: 'BillingForm',
+})
+
 const props = defineProps({
   modelValue: {
     type: Object,
@@ -14,19 +21,77 @@ const updateField = (field, value) => {
     [field]: value,
   })
 }
+
+// === AUTO FILL: load data billing tersimpan saat component mount ===
+onMounted(() => {
+  try {
+    const raw = localStorage.getItem('emotix_billing')
+    if (!raw) return
+
+    const saved = JSON.parse(raw)
+    // cuma pakai kalau memang disimpan sebagai "save for next time"
+    if (!saved || saved.saveInfo === false) return
+
+    emit('update:modelValue', {
+      ...props.modelValue,
+      ...saved,
+      // pastikan checkbox tetap ON
+      saveInfo: true,
+    })
+  } catch (err) {
+    console.error('[BillingForm] Failed to load emotix_billing', err)
+  }
+})
+
+// === AUTO SAVE: setiap form berubah & saveInfo = true, simpan ke localStorage ===
+watch(
+  () => props.modelValue,
+  (val) => {
+    if (!val || !val.saveInfo) return
+    try {
+      localStorage.setItem(
+        'emotix_billing',
+        JSON.stringify({
+          ...val,
+          userEmail: authState.email || null, // <--- simpan info user login
+        })
+      )
+    } catch (err) {
+      console.error('[BillingForm] Failed to save emotix_billing', err)
+    }
+  },
+  { deep: true }
+)
+
+// Kalau user matikan checkbox → hapus data billing tersimpan
+watch(
+  () => props.modelValue.saveInfo,
+  (newVal) => {
+    if (newVal === false) {
+      try {
+        localStorage.removeItem('emotix_billing')
+      } catch (err) {
+        console.error('[BillingForm] Failed to remove emotix_billing', err)
+      }
+    }
+  }
+)
 </script>
 
 <template>
-  <section class="bg-white rounded-md shadow-sm border border-gray-100 p-6 md:p-8 space-y-5">
-    <!-- First Name -->
+  <section
+    class="bg-white rounded-md shadow-sm border border-gray-100 p-6 md:p-8 space-y-5"
+  >
+    <!-- Full Name -->
     <div class="space-y-1">
       <label class="block text-xs md:text-sm text-gray-700 mb-1">
-        First Name<span class="text-red-500">*</span>
+        Full Name<span class="text-red-500">*</span>
       </label>
       <input
         :value="modelValue.firstName"
         @input="updateField('firstName', $event.target.value)"
         type="text"
+        placeholder="Full Name"
         class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm
                focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 bg-white"
       />
@@ -98,20 +163,9 @@ const updateField = (field, value) => {
         :value="modelValue.phoneNumber"
         @input="updateField('phoneNumber', $event.target.value)"
         type="tel"
-        class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm
-               focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 bg-white"
-      />
-    </div>
-
-    <!-- Email Address -->
-    <div class="space-y-1">
-      <label class="block text-xs md:text-sm text-gray-700 mb-1">
-        Email Address<span class="text-red-500">*</span>
-      </label>
-      <input
-        :value="modelValue.emailAddress"
-        @input="updateField('emailAddress', $event.target.value)"
-        type="email"
+        placeholder="08xx xxxx xxxx"
+        minlength="12"
+        maxlength="12"
         class="w-full border border-gray-300 rounded px-3 py-2 text-xs md:text-sm
                focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 bg-white"
       />

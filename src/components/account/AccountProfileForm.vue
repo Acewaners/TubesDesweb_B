@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
+import { updatePassword } from '@/stores/authStore'
 
 defineOptions({
   name: 'AccountProfileForm',
@@ -15,7 +16,6 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  // email & address sekarang datang dari luar (AccountView)
   email: {
     type: String,
     default: '',
@@ -44,7 +44,6 @@ const lastNameModel = computed({
 const email = ref(props.email || '')
 const address = ref(props.address || '')
 
-// kalau suatu saat props.email / props.address berubah, form ikut update
 watch(
   () => props.email,
   (val) => {
@@ -65,15 +64,90 @@ const confirmPassword = ref('')
 
 const isSaving = ref(false)
 const message = ref('')
+const errorMessage = ref('')
+
+// helper: ambil password terdaftar sekarang
+function getRegisteredPassword() {
+  try {
+    const raw = localStorage.getItem('emotix_registered_user')
+    if (!raw) return null
+    const registered = JSON.parse(raw)
+    return registered?.password || null
+  } catch {
+    return null
+  }
+}
 
 const handleSave = () => {
   message.value = ''
+  errorMessage.value = ''
   isSaving.value = true
 
+  // --- VALIDASI & UPDATE PASSWORD (kalau user isi) ---
+  const wantsChangePassword =
+    currentPassword.value || newPassword.value || confirmPassword.value
+
+  if (wantsChangePassword) {
+    // semua field wajib diisi
+    if (!currentPassword.value || !newPassword.value || !confirmPassword.value) {
+      isSaving.value = false
+      errorMessage.value = 'Please fill all password fields.'
+      return
+    }
+
+    const registeredPassword = getRegisteredPassword()
+    if (!registeredPassword) {
+      isSaving.value = false
+      errorMessage.value =
+        'No registered user found. Password cannot be updated in this demo.'
+      return
+    }
+
+    // cek current password benar
+    if (currentPassword.value !== registeredPassword) {
+      isSaving.value = false
+      errorMessage.value = 'Current password is incorrect.'
+      return
+    }
+
+    // cek new = confirm
+    if (newPassword.value !== confirmPassword.value) {
+      isSaving.value = false
+      errorMessage.value = 'New password and confirmation do not match.'
+      return
+    }
+
+    // boleh tambahin rule panjang minimal kalau mau
+    if (newPassword.value.length < 6) {
+      isSaving.value = false
+      errorMessage.value = 'New password must be at least 6 characters.'
+      return
+    }
+
+    // update ke localStorage (emotix_registered_user)
+    const ok = updatePassword(newPassword.value)
+    if (!ok) {
+      isSaving.value = false
+      errorMessage.value = 'Failed to update password (local error).'
+      return
+    }
+  }
+
+  // simulasi delay save profile
   setTimeout(() => {
     isSaving.value = false
-    message.value =
-      'Profile updated successfully (dummy, belum terhubung ke backend).'
+
+    if (wantsChangePassword) {
+      message.value =
+        'Profile and password updated successfully!'
+      // bersihin field password biar aman
+      currentPassword.value = ''
+      newPassword.value = ''
+      confirmPassword.value = ''
+    } else {
+      message.value =
+        'Profile updated successfully!'
+    }
   }, 700)
 }
 
@@ -82,6 +156,7 @@ const handleCancel = () => {
   newPassword.value = ''
   confirmPassword.value = ''
   message.value = ''
+  errorMessage.value = ''
 }
 </script>
 
@@ -197,7 +272,10 @@ const handleCancel = () => {
 
       <!-- Footer form -->
       <div class="flex flex-col md:flex-row items-center justify-end gap-3 pt-2">
-        <p v-if="message" class="text-xs text-teal-600 mr-auto md:mr-4">
+        <p v-if="errorMessage" class="text-xs text-red-500 mr-auto md:mr-4">
+          {{ errorMessage }}
+        </p>
+        <p v-else-if="message" class="text-xs text-teal-600 mr-auto md:mr-4">
           {{ message }}
         </p>
 

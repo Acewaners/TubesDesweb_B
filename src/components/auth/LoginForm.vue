@@ -15,18 +15,15 @@ const remember = ref(false)
 const loading = ref(false)
 const errorMessage = ref('')
 
-// Hapus pesan error saat input berubah
 const clearError = () => {
   if (errorMessage.value) errorMessage.value = ''
 }
 
-// Fungsi utama login
 const onLogin = () => {
   errorMessage.value = ''
   const emailVal = email.value.trim()
   const passVal = password.value.trim()
 
-  // Validasi kosong
   if (!emailVal || !passVal) {
     errorMessage.value = 'Email dan Password harus diisi.'
     return
@@ -34,12 +31,10 @@ const onLogin = () => {
 
   loading.value = true
 
-  // Ambil user yang sudah diregister
   const registered = JSON.parse(
-    localStorage.getItem('emotix_registered_user') || 'null'
+    localStorage.getItem('emotix_registered_user') || 'null',
   )
 
-  // Validasi akun
   if (
     !registered ||
     registered.email !== emailVal ||
@@ -50,29 +45,27 @@ const onLogin = () => {
     return
   }
 
-  // Login berhasil → simpan data ke authStore
   login({
     name: registered.name,
     email: registered.email,
   })
 
   loading.value = false
-  password.value = '' // bersihkan biar aman
+  password.value = ''
 
-  // Redirect ke home / akun
   router.push('/')
 }
 </script>
 
 <template>
   <div>
-    <h2 class="text-3xl font-semibold text-black mb-4">
+    <h2 class="text-2xl md:text-3xl font-semibold text-black mb-4">
       Log in to Emotix
     </h2>
 
-    <form @submit.prevent="onLogin">
+    <form @submit.prevent="onLogin" class="space-y-4">
       <!-- Email -->
-      <div class="mb-6">
+      <div>
         <label for="email" class="block text-sm text-neutral-500 mb-2">
           Email address
         </label>
@@ -90,7 +83,7 @@ const onLogin = () => {
       </div>
 
       <!-- Password -->
-      <div class="mb-6">
+      <div>
         <label for="password" class="block text-sm text-neutral-500 mb-2">
           Password
         </label>
@@ -108,7 +101,7 @@ const onLogin = () => {
       </div>
 
       <!-- Remember me -->
-      <div class="mb-6 flex items-center">
+      <div class="flex items-center">
         <input
           id="remember"
           type="checkbox"
@@ -118,8 +111,8 @@ const onLogin = () => {
         <label for="remember" class="text-sm">Remember me</label>
       </div>
 
-      <!-- Tombol login -->
-      <div class="mb-4 flex items-center gap-4">
+      <!-- Tombol login + link signup -->
+      <div class="flex items-center flex-wrap gap-3">
         <button
           type="submit"
           :disabled="loading"
@@ -135,24 +128,16 @@ const onLogin = () => {
 
         <RouterLink
           to="/signup"
-          class="text-sm text-red-500 hover:underline dark:text-red-400 self-center"
+          class="text-sm text-red-500 hover:underline self-center"
         >
           Create account
         </RouterLink>
       </div>
 
       <!-- Pesan error -->
-      <p v-if="errorMessage" class="text-sm text-red-500 mb-2">
+      <p v-if="errorMessage" class="text-sm text-red-500">
         {{ errorMessage }}
       </p>
-
-      <!-- Forgot password -->
-      <a
-        href="#!"
-        class="text-sm text-red-500 hover:underline dark:text-red-400"
-      >
-        Forgot password?
-      </a>
     </form>
   </div>
 </template>

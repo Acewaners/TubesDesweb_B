@@ -1,9 +1,35 @@
 <script setup>
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { PaperAirplaneIcon } from '@heroicons/vue/24/outline'
+import { authState } from '@/stores/authStore'
 
 defineOptions({
   name: 'TheFooter',
 })
+
+const router = useRouter()
+const isLoggedIn = computed(() => authState.isAuthenticated)
+
+// Helper: kalau butuh login dulu
+const goProtected = (targetPath) => {
+  if (!isLoggedIn.value) {
+    router.push({
+      name: 'login',
+      query: { redirect: targetPath },
+    })
+  } else {
+    router.push(targetPath)
+  }
+}
+
+// Shortcut fungsi navigasi
+const goAccount = () => goProtected('/account')
+const goCart = () => goProtected('/cart')
+const goWishlist = () => goProtected('/wishlist')
+const goShop = () => router.push('/') // homepage
+const goLogin = () => router.push({ name: 'login' })
+const goContact = () => router.push('/contact')
 </script>
 
 <template>
@@ -14,7 +40,9 @@ defineOptions({
         <!-- Column 1: Brand & Subscribe -->
         <div class="space-y-4 sm:col-span-2 lg:col-span-1">
           <h3 class="text-xl md:text-2xl font-bold text-white">Emotix</h3>
-          <p class="text-sm text-white/90">10% Discount on First Purchase for All Products!</p>
+          <p class="text-sm text-white/90">
+            10% Discount on First Purchase for All Products!
+          </p>
 
           <!-- Email Input -->
           <div class="relative mt-4 max-w-sm">
@@ -26,6 +54,7 @@ defineOptions({
             <button
               class="absolute right-2 top-1/2 -translate-y-1/2 text-white hover:text-white/80 transition-colors"
               aria-label="Subscribe"
+              type="button"
             >
               <PaperAirplaneIcon class="w-5 h-5" />
             </button>
@@ -34,7 +63,9 @@ defineOptions({
 
         <!-- Column 2: Support -->
         <div class="space-y-3">
-          <h4 class="text-base md:text-lg font-bold text-white mb-4 md:mb-6">Support</h4>
+          <h4 class="text-base md:text-lg font-bold text-white mb-4 md:mb-6">
+            Support
+          </h4>
           <div class="space-y-2 md:space-y-3 text-sm text-white/90">
             <p class="leading-relaxed">
               Sei Wain KM. 15, Karang Joang,<br />
@@ -48,41 +79,87 @@ defineOptions({
 
         <!-- Column 3: Account -->
         <div class="space-y-3">
-          <h4 class="text-base md:text-lg font-bold text-white mb-4 md:mb-6">Account</h4>
+          <h4 class="text-base md:text-lg font-bold text-white mb-4 md:mb-6">
+            Account
+          </h4>
           <ul class="space-y-2 md:space-y-3 text-sm text-white/90">
             <li>
-              <a href="#" class="hover:text-white transition-colors">My Account</a>
+              <button
+                type="button"
+                class="hover:text-white transition-colors text-left"
+                @click="goAccount"
+              >
+                My Account
+              </button>
+            </li>
+            <li v-if="!isLoggedIn">
+              <button
+                type="button"
+                class="hover:text-white transition-colors text-left"
+                @click="goLogin"
+              >
+                Login / Register
+              </button>
             </li>
             <li>
-              <a href="#" class="hover:text-white transition-colors">Login / Register</a>
+              <button
+                type="button"
+                class="hover:text-white transition-colors text-left"
+                @click="goCart"
+              >
+                Cart
+              </button>
             </li>
             <li>
-              <a href="#" class="hover:text-white transition-colors">Cart</a>
+              <button
+                type="button"
+                class="hover:text-white transition-colors text-left"
+                @click="goWishlist"
+              >
+                Wishlist
+              </button>
             </li>
             <li>
-              <a href="#" class="hover:text-white transition-colors">Wishlist</a>
-            </li>
-            <li>
-              <a href="#" class="hover:text-white transition-colors">Shop</a>
+              <button
+                type="button"
+                class="hover:text-white transition-colors text-left"
+                @click="goShop"
+              >
+                Shop
+              </button>
             </li>
           </ul>
         </div>
 
         <!-- Column 4: Quick Link -->
         <div class="space-y-3">
-          <h4 class="text-base md:text-lg font-bold text-white mb-4 md:mb-6">Quick Link</h4>
+          <h4 class="text-base md:text-lg font-bold text-white mb-4 md:mb-6">
+            Quick Link
+          </h4>
           <ul class="space-y-2 md:space-y-3 text-sm text-white/90">
             <li>
-              <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+              <a href="#" class="hover:text-white transition-colors">
+                Privacy Policy
+              </a>
             </li>
             <li>
-              <a href="#" class="hover:text-white transition-colors">Terms Of Use</a>
+              <a href="#" class="hover:text-white transition-colors">
+                Terms Of Use
+              </a>
             </li>
             <li>
-              <a href="#" class="hover:text-white transition-colors">FAQ</a>
+              <a href="#" class="hover:text-white transition-colors">
+                FAQ
+              </a>
             </li>
             <li>
-              <a href="#" class="hover:text-white transition-colors">Contact</a>
+              <button
+                type="button"
+                class="hover:text-white transition-colors text-left"
+                @click="goContact"
+              >
+                Contact
+              </button>
             </li>
           </ul>
         </div>

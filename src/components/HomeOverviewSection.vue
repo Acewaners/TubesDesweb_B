@@ -1,126 +1,25 @@
 <script setup>
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/outline'
-import ProductCard from './ProductCard.vue'
+import { computed } from 'vue'
+import ProductCard from './product/ProductCard.vue'
+import { products } from '@/data/products'
 
 defineOptions({
   name: 'HomeOverviewSection',
 })
 
-// Best Selling Products Data
-const bestSellingProducts = [
-  {
-    id: 1,
-    title: 'Apple AirPods Max Over-Ear Headphones',
-    price: 260,
-    oldPrice: 360,
-    rating: 5,
-    reviews: 65,
-    image: '/airpods.png',
-  },
-  {
-    id: 2,
-    title: 'Havit H2002D Pink Gaming Headset',
-    price: 960,
-    oldPrice: 1160,
-    rating: 5,
-    reviews: 65,
-    image: '/pink-headset.png',
-  },
-  {
-    id: 3,
-    title: 'Logitech F710 Wireless Gamepad',
-    price: 160,
-    oldPrice: 170,
-    rating: 5,
-    reviews: 65,
-    image: '/gamepad.png',
-  },
-  {
-    id: 4,
-    title: 'Amazfit GTR 3 Smart Watch',
-    price: 360,
-    oldPrice: null,
-    rating: 5,
-    reviews: 65,
-    image: '/watch.png',
-  },
-]
+// ID produk yang mau ditampilkan di HOME
+// Sesuaikan sendiri kalau kamu ganti / tambah produk
+const bestSellingIds = [1, 2, 3, 4]       // cuma 4 item
+const exploreIds = [5, 6, 7, 8]           // contoh: 4 item untuk "Explore"
 
-// Explore Our Products Data
-const exploreProducts = [
-  {
-    id: 5,
-    title: 'Havit H2002D Pink Gaming Headset',
-    price: 100,
-    oldPrice: null,
-    rating: 5,
-    reviews: 35,
-    image: '/pink-headset.png',
-  },
-  {
-    id: 6,
-    title: 'ASUS TUF Gaming F15 Laptop',
-    price: 360,
-    oldPrice: null,
-    rating: 5,
-    reviews: 95,
-    image: '/laptop.png',
-  },
-  {
-    id: 7,
-    title: 'Logitech F710 Wireless Gamepad',
-    price: 700,
-    oldPrice: null,
-    rating: 5,
-    reviews: 325,
-    image: '/gamepad.png',
-  },
-  {
-    id: 8,
-    title: 'Apple AirPods Max Over-Ear Headphones',
-    price: 500,
-    oldPrice: null,
-    rating: 5,
-    reviews: 145,
-    image: '/airpods.png',
-  },
-  {
-    id: 9,
-    title: 'Canon EOS 200D II DSLR Camera',
-    price: 960,
-    oldPrice: null,
-    rating: 5,
-    reviews: 65,
-    image: '/camera.png',
-  },
-  {
-    id: 10,
-    title: 'Apple iPhone 14 Pro Max',
-    price: 1160,
-    oldPrice: null,
-    rating: 5,
-    reviews: 35,
-    image: '/iphone-14.png',
-  },
-  {
-    id: 11,
-    title: 'Amazfit GTR 3 Smart Watch',
-    price: 660,
-    oldPrice: null,
-    rating: 5,
-    reviews: 55,
-    image: '/watch.png',
-  },
-  {
-    id: 12,
-    title: 'Apple Pencil (2nd Generation)',
-    price: 660,
-    oldPrice: null,
-    rating: 5,
-    reviews: 55,
-    image: '/stylus-pen.png',
-  },
-]
+// Ambil data dari products.js berdasarkan ID di atas
+const bestSellingProducts = computed(() =>
+  products.filter((p) => bestSellingIds.includes(p.id))
+)
+
+const exploreProducts = computed(() =>
+  products.filter((p) => exploreIds.includes(p.id))
+)
 </script>
 
 <template>
@@ -129,22 +28,15 @@ const exploreProducts = [
     <div>
       <!-- Header -->
       <div class="mb-8">
-        <!-- Label with red indicator -->
         <div class="flex items-center gap-3 mb-4">
           <div class="w-5 h-10 bg-red-500 rounded"></div>
           <span class="text-red-500 font-semibold text-sm md:text-base">This Month</span>
         </div>
 
-        <!-- Title & Button -->
         <div class="flex items-center justify-between">
           <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900">
             Best Selling Products
           </h2>
-          <button
-            class="bg-red-500 hover:bg-red-800 text-white px-6 md:px-8 py-2.5 md:py-3 rounded text-sm md:text-base font-medium transition-colors cursor-pointer"
-          >
-            View All
-          </button>
         </div>
       </div>
 
@@ -154,11 +46,11 @@ const exploreProducts = [
           v-for="product in bestSellingProducts"
           :key="product.id"
           :id="product.id"
-          :title="product.title"
+          :title="product.name"
           :price="product.price"
           :old-price="product.oldPrice"
           :rating="product.rating"
-          :reviews="product.reviews"
+          :reviews="product.reviewsCount"
           :image="product.image"
         />
       </div>
@@ -166,35 +58,16 @@ const exploreProducts = [
 
     <!-- SECTION 2: Explore Our Products -->
     <div>
-      <!-- Header -->
       <div class="mb-8">
-        <!-- Label with red indicator -->
         <div class="flex items-center gap-3 mb-4">
           <div class="w-5 h-10 bg-red-500 rounded"></div>
           <span class="text-red-500 font-semibold text-sm md:text-base">Our Products</span>
         </div>
 
-        <!-- Title & Navigation -->
         <div class="flex items-center justify-between">
           <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900">
             Explore Our Products
           </h2>
-
-          <!-- Navigation Buttons -->
-          <div class="flex items-center gap-2">
-            <button
-              class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
-              aria-label="Previous"
-            >
-              <ChevronLeftIcon class="w-5 h-5 md:w-6 md:h-6 text-gray-700" />
-            </button>
-            <button
-              class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
-              aria-label="Next"
-            >
-              <ChevronRightIcon class="w-5 h-5 md:w-6 md:h-6 text-gray-700" />
-            </button>
-          </div>
         </div>
       </div>
 
@@ -204,21 +77,22 @@ const exploreProducts = [
           v-for="product in exploreProducts"
           :key="product.id"
           :id="product.id"
-          :title="product.title"
+          :title="product.name"
           :price="product.price"
           :old-price="product.oldPrice"
           :rating="product.rating"
-          :reviews="product.reviews"
+          :reviews="product.reviewsCount"
           :image="product.image"
         />
       </div>
 
       <div class="mt-7 w-full flex justify-center">
-        <button
+        <RouterLink
+          :to="{ name: 'all-products' }"
           class="bg-red-500 hover:bg-red-800 text-white px-6 md:px-8 py-2.5 md:py-3 rounded text-sm md:text-base font-medium transition-colors cursor-pointer"
         >
           View All Products
-        </button>
+        </RouterLink>
       </div>
     </div>
   </section>

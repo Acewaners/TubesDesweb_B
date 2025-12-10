@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter, RouterLink } from 'vue-router'
+import { login as authLogin } from '@/stores/authStore'
 
 defineOptions({
   name: 'RegisterForm',
@@ -24,9 +25,7 @@ const onRegister = () => {
     return
   }
 
-  // Simulasikan proses registrasi dummy
   setTimeout(() => {
-    // Simpan data sementara ke localStorage (bukan auto-login)
     const newUser = {
       name: nama.value.trim(),
       email: email.value.trim(),
@@ -36,23 +35,43 @@ const onRegister = () => {
     localStorage.setItem('emotix_registered_user', JSON.stringify(newUser))
 
     loading.value = false
-    alert('Registrasi berhasil! Silakan login untuk melanjutkan.')
+    alert('Registrasi berhasil! Silakan login terlebih dahulu.')
     router.push('/login')
   }, 600)
+}
+
+const onGoogleSignup = () => {
+  loading.value = true
+  errorMessage.value = ''
+
+  setTimeout(() => {
+    const googleUser = {
+      name: 'Google User',
+      email: 'googleuser@example.com',
+    }
+
+    localStorage.setItem('emotix_registered_user', JSON.stringify(googleUser))
+
+    authLogin(googleUser)
+
+    loading.value = false
+    alert('Sign up with Google (dummy) berhasil! Anda sudah login sebagai Google User.')
+    router.push('/')
+  }, 800)
 }
 </script>
 
 <template>
   <div>
-    <h2 class="text-3xl font-semibold text-black mb-4">
+    <h2 class="text-2xl md:text-3xl font-semibold text-black mb-4">
       Create an account
     </h2>
 
     <form class="space-y-4" @submit.prevent="onRegister">
       <!-- Nama -->
       <div>
-        <label for="nama" class="block text-sm text-neutral-500 mb-2">
-          Nama
+        <label for="name" class="block text-sm text-neutral-500 mb-2">
+          Name
         </label>
         <input
           v-model="nama"
@@ -61,7 +80,7 @@ const onRegister = () => {
           class="block w-full rounded border border-neutral-200 bg-transparent
                  px-3 py-2 leading-normal outline-none transition-shadow duration-150
                  focus:shadow-outline focus:border-primary"
-          placeholder="Nama lengkap"
+          placeholder="Full Name"
           required
         />
       </div>
@@ -117,10 +136,12 @@ const onRegister = () => {
       <!-- Google -->
       <button
         type="button"
+        @click="onGoogleSignup"
+        :disabled="loading"
         class="w-full flex items-center justify-center text-gray-900 bg-white border
                border-gray-300 hover:bg-gray-100 focus:ring-4 focus:outline-none
                focus:ring-gray-200 font-medium rounded-md text-sm px-5 py-2.5
-               text-center mt-2"
+               text-center mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
       >
         <svg
           class="w-5 h-5 mr-2"

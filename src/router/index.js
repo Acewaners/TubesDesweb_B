@@ -4,8 +4,6 @@ import HomeView from '@/views/HomeView.vue'
 import ContactView from '@/views/ContactView.vue'
 import LoginView from '@/views/LoginView.vue'
 import SignUpView from '@/views/SignUpView.vue'
-
-// Halaman baru
 import AccountView from '@/views/AccountView.vue'
 import OrdersView from '@/views/OrdersView.vue'
 import CancellationsView from '@/views/CancellationsView.vue'
@@ -16,6 +14,10 @@ import WishlistView from '@/views/WishlistView.vue'
 import CheckoutView from '@/views/CheckoutView.vue'
 import PaymentView from '@/views/PaymentView.vue'
 import PaymentSuccessView from '@/views/PaymentSuccessView.vue'
+import ProductDetailView from '@/views/ProductDetailView.vue'
+import ProductReviewsView from '@/views/ProductReviewsView.vue'
+import AllProductsView from '@/views/AllProductsView.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -53,6 +55,21 @@ const router = createRouter({
       component: OrdersView,
     },
     {
+      path: '/products/:id',
+      name: 'product-detail',
+      component: ProductDetailView,
+    },
+    {
+      path: '/products/:id/reviews',
+      name: 'product-reviews',
+      component: ProductReviewsView,
+    },
+    {
+      path: '/products',
+      name: 'all-products',
+      component: AllProductsView,
+    },
+    {
       path: '/cancellations',
       name: 'cancellations',
       component: CancellationsView,
@@ -62,14 +79,6 @@ const router = createRouter({
       name: 'reviews',
       component: ReviewsView,
     },
-
-    // Cart page
-    {
-      path: '/cart',
-      name: 'cart',
-      component: CartView,
-    },
-
     {
       path: '/wishlist',
       name: 'wishlist',

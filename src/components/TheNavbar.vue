@@ -10,7 +10,7 @@ import {
   ShoppingBagIcon,
   NoSymbolIcon,
   StarIcon,
-  ArrowLeftOnRectangleIcon, // <- ini tadi hilang
+  ArrowLeftOnRectangleIcon,
 } from '@heroicons/vue/24/outline'
 import { cartItemCount } from '@/stores/cartStore'
 import { authState, logout as authLogout } from '@/stores/authStore'
@@ -24,7 +24,7 @@ const router = useRouter()
 
 const isMobileMenuOpen = ref(false)
 
-// ----- Account dropdown -----
+// ----- Account dropdown (desktop) -----
 const isAccountMenuOpen = ref(false)
 const accountMenuRef = ref(null)
 
@@ -64,6 +64,12 @@ const handleLogout = () => {
   authLogout()
   isAccountMenuOpen.value = false
   router.push('/login')
+}
+
+// Mobile: klik icon orang → langsung ke halaman account
+const goToAccountMobile = () => {
+  closeMobileMenu()
+  router.push('/account')
 }
 </script>
 
@@ -129,7 +135,7 @@ const handleLogout = () => {
             v-if="authState.isAuthenticated"
             class="hidden lg:flex items-center gap-6"
           >
-            <!-- WISHLIST DESKTOP: ke /wishlist + badge jumlah -->
+            <!-- WISHLIST DESKTOP -->
             <RouterLink
               to="/wishlist"
               class="relative text-black hover:text-gray-600 cursor-pointer transition-colors"
@@ -158,7 +164,7 @@ const handleLogout = () => {
               </span>
             </RouterLink>
 
-            <!-- Account dropdown -->
+            <!-- Account dropdown (desktop) -->
             <div class="relative" ref="accountMenuRef">
               <button
                 @click.stop="toggleAccountMenu"
@@ -267,7 +273,7 @@ const handleLogout = () => {
             Sign Up
           </RouterLink>
 
-          <!-- Mobile Icons: juga hanya saat SUDAH login -->
+          <!-- Mobile Icons: hanya saat SUDAH login -->
           <div
             v-if="authState.isAuthenticated"
             class="flex items-center gap-6 px-4 pt-4 border-t border-gray-100"
@@ -288,6 +294,7 @@ const handleLogout = () => {
               </span>
             </RouterLink>
 
+            <!-- Cart mobile -->
             <RouterLink
               to="/cart"
               @click="closeMobileMenu"
@@ -302,7 +309,13 @@ const handleLogout = () => {
               </span>
             </RouterLink>
 
-            <button class="text-black hover:text-gray-600 transition-colors" aria-label="Account">
+            <!-- Account mobile: langsung ke /account -->
+            <button
+              class="text-black hover:text-gray-600 transition-colors"
+              aria-label="Account"
+              type="button"
+              @click="goToAccountMobile"
+            >
               <UserIcon class="w-6 h-6" />
             </button>
           </div>

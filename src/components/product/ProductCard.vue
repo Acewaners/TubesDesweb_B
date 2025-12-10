@@ -5,7 +5,8 @@ import { HeartIcon, EyeIcon } from '@heroicons/vue/24/outline'
 import { StarIcon } from '@heroicons/vue/24/solid'
 import { addToCart } from '@/stores/cartStore'
 import { authState } from '@/stores/authStore'
-import { toggleWishlist, isInWishlist } from '@/stores/wishlistStore'
+import { toggleWishlist } from '@/stores/wishlistStore'
+import { reviewState } from '@/stores/reviewStore'
 
 defineOptions({
   name: 'ProductCard',
@@ -30,21 +31,37 @@ const props = defineProps({
     type: [String, Number],
     default: null,
   },
-  rating: {
-    type: Number,
-    default: 5,
-  },
-  reviews: {
-    type: Number,
-    default: 0,
-  },
   image: {
     type: String,
     default: '/airpods.png',
   },
 })
 
-// ADD TO CART – hanya boleh kalau sudah login
+// =====================
+//  REVIEW DATA (REAL TIME)
+// =====================
+
+// Semua review produk ini
+const productReviews = computed(() =>
+  reviewState.reviews.filter((r) => Number(r.productId) === Number(props.id)),
+)
+
+// Jumlah review asli
+const reviewsCount = computed(() => productReviews.value.length)
+
+// Average rating dari review nyata
+const averageRating = computed(() => {
+  if (!productReviews.value.length) return 0
+  const sum = productReviews.value.reduce(
+    (acc, r) => acc + Number(r.rating || 0),
+    0,
+  )
+  return Number((sum / productReviews.value.length).toFixed(1))
+})
+
+// =====================
+// ADD TO CART
+// =====================
 const handleAddToCart = () => {
   if (!authState.isAuthenticated) {
     router.push({
@@ -62,9 +79,9 @@ const handleAddToCart = () => {
   })
 }
 
-// WISHLIST
-const inWishlist = computed(() => isInWishlist(props.id))
-
+// =====================
+// WISHLIST (fungsi jalan, ikon tidak ikut state)
+// =====================
 const handleToggleWishlist = () => {
   if (!authState.isAuthenticated) {
     router.push({
@@ -81,6 +98,16 @@ const handleToggleWishlist = () => {
     image: props.image,
   })
 }
+
+// =====================
+// DETAIL PAGE REDIRECT
+// =====================
+const goToProductDetail = () => {
+  router.push({
+    name: 'product-detail',
+    params: { id: props.id },
+  })
+}
 </script>
 
 <template>
@@ -89,28 +116,26 @@ const handleToggleWishlist = () => {
   >
     <!-- Wishlist & Eye Icons -->
     <div class="absolute top-3 right-3 flex flex-col space-y-2 z-10">
-      <!-- HEART: toggle wishlist -->
+      <!-- HEART: toggle wishlist (ikon tetap abu-abu, hanya hover yang merah) -->
       <button
         class="bg-white rounded-full p-1.5 shadow-sm hover:bg-gray-50 transition-colors"
         @click.stop="handleToggleWishlist"
       >
         <HeartIcon
-          class="w-5 h-5 transition-colors"
-          :class="
-            inWishlist
-              ? 'text-red-500'
-              : 'text-gray-600 hover:text-red-500'
-          "
+          class="w-5 h-5 text-gray-600 hover:text-red-500 transition-colors"
         />
       </button>
 
-      <!-- Eye (belum ada fungsi khusus) -->
-      <button class="bg-white rounded-full p-1.5 shadow-sm hover:bg-gray-50 transition-colors">
+      <!-- EYE: Product Detail -->
+      <button
+        class="bg-white rounded-full p-1.5 shadow-sm hover:bg-gray-50 transition-colors"
+        @click.stop="goToProductDetail"
+      >
         <EyeIcon class="w-5 h-5 text-gray-600 hover:text-black transition-colors" />
       </button>
     </div>
 
-    <!-- Product Image Container -->
+    <!-- Product Image -->
     <div class="relative">
       <div class="aspect-square flex items-center justify-center py-4">
         <img :src="image" :alt="title" class="w-full h-full object-contain" />
@@ -135,15 +160,25 @@ const handleToggleWishlist = () => {
       </h3>
 
       <div class="flex items-center gap-3">
-        <span class="text-red-500 font-semibold text-base md:text-lg">Rp.{{ price }}</span>
-        <span v-if="oldPrice" class="text-gray-400 line-through text-sm">Rp.{{ oldPrice }}</span>
+        <span class="text-red-500 font-semibold text-base md:text-lg">
+          Rp. {{ Number(price).toLocaleString('id-ID') }}
+        </span>
+        <span v-if="oldPrice" class="text-gray-400 line-through text-sm">
+          Rp. {{ Number(oldPrice).toLocaleString('id-ID') }}
+        </span>
       </div>
 
+      <!-- RATING + REVIEW COUNT REAL TIME -->
       <div class="flex items-center gap-2">
         <div class="flex items-center">
-          <StarIcon v-for="star in 5" :key="star" class="w-4 h-4 text-yellow-400" />
+          <StarIcon
+            v-for="star in 5"
+            :key="star"
+            class="w-4 h-4"
+            :class="star <= Math.round(averageRating) ? 'text-yellow-400' : 'text-gray-300'"
+          />
         </div>
-        <span class="text-gray-500 text-sm">({{ reviews }})</span>
+        <span class="text-gray-500 text-sm">({{ reviewsCount }})</span>
       </div>
     </div>
   </div>

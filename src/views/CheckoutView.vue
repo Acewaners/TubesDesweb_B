@@ -15,7 +15,7 @@ defineOptions({
 // router untuk pindah ke halaman pembayaran
 const router = useRouter()
 
-// ambil item dari store
+// semua item di cart
 const cartItems = computed(() => cartState.items)
 
 // HANYA item yang dicentang yang ikut checkout
@@ -25,13 +25,12 @@ const checkoutItems = computed(() =>
 
 // billing data dibungkus jadi satu object (dipakai v-model di BillingForm)
 const billingData = ref({
-  firstName: '',
+  firstName: '',      // di UI labelnya Full Name
   companyName: '',
   streetAddress: '',
   apartment: '',
   city: '',
   phoneNumber: '',
-  emailAddress: '',
   saveInfo: true,
 })
 
@@ -42,6 +41,7 @@ const paymentMethod = ref('qris')
 const couponCode = ref('')
 const couponMessage = ref('')
 
+// format uang
 const formatCurrency = (value) =>
   new Intl.NumberFormat('id-ID', {
     style: 'currency',
@@ -49,7 +49,21 @@ const formatCurrency = (value) =>
     maximumFractionDigits: 0,
   }).format(value ?? 0)
 
-// ---- COUPON ----
+// ---------- VALIDASI NOMOR HP ----------
+const validatePhoneNumber = () => {
+  const value = billingData.value.phoneNumber.trim()
+  // 08 + 10 digit berikutnya = 12 digit total
+  const regex = /^08\d{10}$/
+
+  if (!regex.test(value)) {
+    alert('Phone Number harus 12 digit dan dimulai dengan 08 (contoh: 081234567890).')
+    return false
+  }
+
+  return true
+}
+
+// ---------- COUPON ----------
 const applyCoupon = () => {
   if (!couponCode.value.trim()) {
     couponMessage.value = 'Masukkan coupon code terlebih dahulu.'
@@ -59,36 +73,24 @@ const applyCoupon = () => {
     'Coupon diterapkan (dummy). Diskon sebenarnya belum terhubung ke backend.'
 }
 
-// ---- VALIDASI PHONE NUMBER ----
-const validatePhoneNumber = () => {
-  const value = billingData.value.phoneNumber.trim()
-  const regex = /^08\d{10}$/   // 08 + 10 digit = 12 digit total
-
-  if (!regex.test(value)) {
-    alert('Phone Number harus 12 digit dan dimulai dengan 08 (contoh: 081234567890).')
-    return false
-  }
-  return true
-}
-
-// ---- PLACE ORDER → lanjut ke /payment ----
+// ---------- PLACE ORDER → lanjut ke /payment ----------
 const placeOrder = () => {
   const d = billingData.value
 
-  // validasi field wajib
-  if (!d.firstName || !d.streetAddress || !d.city || !d.phoneNumber || !d.emailAddress) {
+  // validasi field wajib (email sudah tidak dipakai)
+  if (!d.firstName || !d.streetAddress || !d.city || !d.phoneNumber) {
     alert(
-      'Lengkapi field wajib (First Name, Street Address, Town/City, Phone Number, Email Address).',
+      'Lengkapi field wajib (Full Name, Street Address, Town/City, Phone Number).',
     )
     return
   }
 
-  // VALIDASI FORMAT HP
+  // validasi format nomor HP
   if (!validatePhoneNumber()) {
     return
   }
 
-  // validasi cart: minimal ada item yang dipilih
+  // validasi item yang ikut checkout: harus ada yang dicentang
   if (checkoutItems.value.length === 0) {
     alert('Pilih minimal satu produk di Cart (centang) sebelum checkout.')
     return
@@ -97,6 +99,9 @@ const placeOrder = () => {
   // simpan data billing & metode bayar (kalau mau dipakai di halaman payment)
   localStorage.setItem('emotix_billing', JSON.stringify(d))
   localStorage.setItem('emotix_payment_method', paymentMethod.value)
+
+  // simpan juga item yang benar-benar di-checkout (bukan semua isi cart)
+  localStorage.setItem('emotix_checkout_items', JSON.stringify(checkoutItems.value))
 
   // pindah ke halaman pembayaran (QRIS)
   router.push('/payment')
@@ -139,6 +144,7 @@ const placeOrder = () => {
 
         <!-- Kanan: Ringkasan order + Payment + Coupon -->
         <section class="space-y-4">
+          <!-- Penting: pakai checkoutItems, bukan cartItems -->
           <OrderSummary :items="checkoutItems" :formatCurrency="formatCurrency" />
 
           <PaymentMethodSelector v-model="paymentMethod" />

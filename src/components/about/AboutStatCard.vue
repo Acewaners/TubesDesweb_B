@@ -18,7 +18,7 @@ const emit = defineEmits(['hover', 'leave'])
     @mouseenter="emit('hover')"
     @mouseleave="emit('leave')"
     class="rounded-md shadow-sm flex flex-col items-center justify-center py-6
-           cursor-pointer transition-colors duration-200 border"
+           transition-colors duration-200 border cursor-default"
     :class="active ? 'bg-red-500 border-red-500' : 'bg-white border-gray-200'"
   >
     <!-- Icon kecil -->

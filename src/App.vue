@@ -10,7 +10,7 @@ import TheFooter from './components/TheFooter.vue'
     <TheNavbar />
 
     <!-- Main Content -->
-    <main class="grow">
+    <main class="grow pt-4 md:pt-6 lg:pt-8">
       <RouterView />
     </main>
 

@@ -5,24 +5,28 @@ defineOptions({
 </script>
 
 <template>
-  <section class="h-screen">
-    <div class="container h-full px-6 py-24">
-      <div class="flex h-full flex-wrap items-center justify-center lg:justify-between">
-        <!-- KIRI: gambar -->
-        <div class="mb-12 md:mb-0 md:w-8/12 lg:w-6/12 flex justify-center">
+  <!-- Pakai min-h-screen supaya boleh scroll kalau konten tinggi -->
+  <section class="min-h-screen flex items-center bg-white">
+    <div class="w-full max-w-6xl mx-auto px-4 md:px-6 py-10 md:py-16 lg:py-20">
+      <div
+        class="flex flex-col lg:flex-row items-center lg:items-stretch
+               gap-8 md:gap-10 lg:gap-16"
+      >
+        <!-- KIRI: gambar (di atas pada layar kecil) -->
+        <div
+          class="w-full lg:w-1/2 flex justify-center mb-6 md:mb-0"
+        >
           <img
             src="https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
-            class="w-full object-cover rounded-lg shadow-lg max-w-[520px] h-auto"
+            class="w-full max-w-md md:max-w-lg h-auto object-contain rounded-lg shadow-lg"
             alt="Phone image"
           />
         </div>
 
         <!-- KANAN: slot untuk form -->
-        <div class="md:w-8/12 lg:ms-6 lg:w-5/12">
-          <div class="px-6">
-            <div class="max-w-xs ml-auto">
-              <slot />
-            </div>
+        <div class="w-full lg:w-1/2">
+          <div class="w-full max-w-md mx-auto">
+            <slot />
           </div>
         </div>
       </div>

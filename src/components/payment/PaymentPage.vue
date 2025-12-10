@@ -2,6 +2,7 @@
 import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { cartState, clearCart } from '@/stores/cartStore'
+import { authState } from '@/stores/authStore'
 
 defineOptions({
   name: 'PaymentPage',
@@ -60,7 +61,6 @@ onBeforeUnmount(() => {
 
 // ===================
 // Simulate Payment -> halaman sukses
-// ===================
 const simulatePayment = () => {
   // safety: kalau cart kosong tiba-tiba, lempar ke home
   if (cartItems.value.length === 0) {
@@ -68,20 +68,53 @@ const simulatePayment = () => {
     return
   }
 
+  // bikin objek order lengkap
   const order = {
     orderNumber: orderNumber.value,
     method: 'QRIS',
-    date: new Date().toLocaleDateString('id-ID', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    }),
+    // pakai ISO supaya gampang diparse lagi
+    date: new Date().toISOString(),
     totalFormatted: formatCurrency(totalPayment.value),
+    total: totalPayment.value,
+    status: 'Paid',
+    items: cartItems.value.map((item) => ({
+      id: item.id,
+      title: item.title,
+      quantity: item.quantity ?? 1,
+      price: item.price ?? 0,
+      image: item.image,
+    })),
   }
 
   // simpan data order terakhir buat dibaca di PaymentSuccessCard
   localStorage.setItem('emotix_last_order', JSON.stringify(order))
 
+  // ====== SIMPAN KE RIWAYAT ORDER PER USER / GUEST ======
+  const userEmail = authState.email || null
+  const storageKey = userEmail
+    ? `emotix_orders_${userEmail}`
+    : 'emotix_orders_guest'
+
+  let orders = []
+  try {
+    const raw = localStorage.getItem(storageKey) || '[]'
+    const parsed = JSON.parse(raw)
+    orders = Array.isArray(parsed) ? parsed : []
+  } catch (err) {
+    console.error('[PaymentPage] Failed to parse orders', err)
+    orders = []
+  }
+
+  // taruh order terbaru di paling atas
+  orders.unshift(order)
+
+  try {
+    localStorage.setItem(storageKey, JSON.stringify(orders))
+  } catch (err) {
+    console.error('[PaymentPage] Failed to save orders', err)
+  }
+
+  // kosongkan cart & pindah ke halaman sukses
   clearCart()
   router.push('/payment-success')
 }

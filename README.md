@@ -42,3 +42,18 @@ npm run build
 ```sh
 npm run lint
 ```
+
+## List FIle Yang Terlibat
+src / components / aboutMe
+- AboutMeStatCard.vue
+- AboutMeStatsGrid.vue
+- AboutMeStorySection.vue
+
+src / views / AboutMeView.vue
+
+## Route Halaman Baru
+{
+  path: '/aboutme',
+  name: 'about me',
+  component: AboutMeView,
+},

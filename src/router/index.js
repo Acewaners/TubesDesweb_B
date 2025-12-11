@@ -17,6 +17,7 @@ import PaymentSuccessView from '@/views/PaymentSuccessView.vue'
 import ProductDetailView from '@/views/ProductDetailView.vue'
 import ProductReviewsView from '@/views/ProductReviewsView.vue'
 import AllProductsView from '@/views/AllProductsView.vue'
+import AboutMeView from '@/views/AboutMeView.vue'
 
 
 const router = createRouter({
@@ -84,16 +85,20 @@ const router = createRouter({
       name: 'wishlist',
       component: WishlistView,
     },
-
-    // Route untuk menu About di navbar
     {
       path: '/about',
       name: 'about',
       component: AboutView,
     },
+    {
+      path: '/aboutme',
+      name: 'about me',
+      component: AboutMeView,
+    },
 
     // Cart
-    { path: '/cart',
+    {
+      path: '/cart',
       name: 'cart',
       component: CartView
     },

@@ -127,8 +127,8 @@ const simulatePayment = () => {
         class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:p-8 space-y-6"
       >
         <!-- Header + countdown -->
-        <header class="flex items-center justify-between gap-4">
-          <div>
+        <header class="flex flex-col md:flex-row md:items-center md:justify-between md:gap-4 gap-3">
+          <div class="flex-1">
             <h1 class="text-lg md:text-xl font-semibold text-gray-900">
               Complete Your Payment
             </h1>
@@ -139,7 +139,7 @@ const simulatePayment = () => {
 
           <div
             v-if="countdown > 0"
-            class="px-3 py-1 rounded-full bg-yellow-50 border border-yellow-200 text-xs md:text-sm text-yellow-700"
+            class="px-3 py-1 rounded-full bg-yellow-50 border border-yellow-200 text-xs text-yellow-700 whitespace-nowrap w-fit"
           >
             Complete payment within
             <span class="font-semibold">{{ formattedCountdown }}</span>

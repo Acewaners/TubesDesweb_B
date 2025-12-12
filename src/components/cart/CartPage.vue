@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from "vue"
 import { RouterLink } from "vue-router"
-import { cartState } from "@/stores/cartStore"
+import { cartState, removeFromCart } from "@/stores/cartStore"
 
 import CartTable from "./CartTable.vue"
 import CartActions from "./CartActions.vue"
@@ -36,6 +36,18 @@ const applyCoupon = () => {
 
 const updateSelected = (item, selected) => {
   item.selected = selected
+}
+
+const deleteSelectedItems = () => {
+  const selectedItems = cartState.items.filter(item => item.selected)
+  if (selectedItems.length === 0) {
+    alert('Pilih item yang ingin dihapus terlebih dahulu')
+    return
+  }
+
+  selectedItems.forEach(item => {
+    removeFromCart(item.id)
+  })
 }
 </script>
 
@@ -83,6 +95,7 @@ const updateSelected = (item, selected) => {
             v-model:couponCode="couponCode"
             :couponMessage="couponMessage"
             @applyCoupon="applyCoupon"
+            @deleteItems="deleteSelectedItems"
           />
         </div>
 

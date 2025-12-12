@@ -12,7 +12,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['update:couponCode', 'applyCoupon'])
+const emit = defineEmits(['update:couponCode', 'applyCoupon', 'deleteItems'])
 
 const onInputCoupon = (event) => {
   emit('update:couponCode', event.target.value)
@@ -32,10 +32,11 @@ const onInputCoupon = (event) => {
 
       <button
         type="button"
-        class="px-4 py-2 border border-gray-300 rounded text-xs md:text-sm text-gray-700
-              hover:bg-gray-100 transition-colors"
+        @click="emit('deleteItems')"
+        class="px-4 py-2 border border-red-500 rounded text-xs md:text-sm text-red-500
+              hover:bg-red-50 transition-colors"
       >
-        Update Cart
+        Delete Item
       </button>
     </div>
 

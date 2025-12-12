@@ -27,7 +27,7 @@ const handleUpdateSelected = (item, selected) => {
   <section class="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden">
     <!-- Header row -->
     <div
-      class="grid grid-cols-4 gap-4 px-6 py-4 text-xs md:text-sm font-semibold text-gray-500 border-b border-gray-100"
+      class="hidden md:grid grid-cols-4 gap-4 px-6 py-4 text-xs md:text-sm font-semibold text-gray-500 border-b border-gray-100"
     >
       <div>Product</div>
       <div class="text-right md:text-left">Price</div>

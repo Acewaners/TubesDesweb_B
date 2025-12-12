@@ -11,7 +11,7 @@ export const products = [
     oldPrice: 150000,
     rating: 4.6,
     reviewsCount: 60.4,
-    image: '/airpods.png',
+    image: '/TubesDesweb_B/airpods.png',
     description:
       `Battery TWS 30 mAh
       Charging Case 300 mAh
@@ -31,7 +31,7 @@ export const products = [
     oldPrice: 750000,
     rating: 5.0,
     reviewsCount: 65,
-    image: '/pink-headset.png',
+    image: '/TubesDesweb_B/pink-headset.png',
     description:
       `Kenapa harus belanja produk iClever di Tribit Official Store?
       * Garansi RESMI iClever Official 1 Tahun (TUKAR BARU jika terbukti defect pabrik)
@@ -48,7 +48,7 @@ export const products = [
     oldPrice: null,
     rating: 4.4,
     reviewsCount: 120,
-    image: '/gamepad.png',
+    image: '/TubesDesweb_B/gamepad.png',
     description:
       `Fantech GP11 SHOOTER Wired Gaming Controller Gamepad For PC PS3 Xbox
       Speksifikasi:
@@ -72,7 +72,7 @@ export const products = [
     oldPrice: null,
     rating: 4.5,
     reviewsCount: 55,
-    image: '/watch.png',
+    image: '/TubesDesweb_B/watch.png',
     description:
       'Amazfit T-Rex 3 - Brave Your Adventure: Pilihan yang cocok untuk petualang sejati, Bodi kuat, desain sporty, dan baterai besar yang siap menemani trail running, hiking, eksplorasi gunung, hutan, maupun olahraga di air.',
     isBestSelling: true,
@@ -89,7 +89,7 @@ export const products = [
     oldPrice: null,
     rating: 4.6,
     reviewsCount: 65,
-    image: '/camera.png',
+    image: '/TubesDesweb_B/camera.png',
     description:
       `Barang Baru dan Original 100%
       Garansi 3 Tahun Resmi Canon Datascrip
@@ -107,7 +107,7 @@ export const products = [
     oldPrice: 12665000,
     rating: 4.9,
     reviewsCount: 35,
-    image: '/iphone-14.png',
+    image: '/TubesDesweb_B/iphone-14.png',
     description:
       `Kondisi HP (ORI)
       Produk Second Asli
@@ -132,7 +132,7 @@ export const products = [
     oldPrice: null,
     rating: 4.5,
     reviewsCount: 55,
-    image: '/watch.png',
+    image: '/TubesDesweb_B/watch.png',
     description:
       'Amazfit T-Rex 3 - Brave Your Adventure: Pilihan yang cocok untuk petualang sejati, Bodi kuat, desain sporty, dan baterai besar yang siap menemani trail running, hiking, eksplorasi gunung, hutan, maupun olahraga di air.',
     isBestSelling: false,
@@ -145,7 +145,7 @@ export const products = [
     oldPrice: null,
     rating: 4.8,
     reviewsCount: 55,
-    image: '/stylus-pen.png',
+    image: '/TubesDesweb_B/stylus-pen.png',
     description:
       `Spesifikasi:
       Metode pengisian daya: Tipe-C
@@ -163,7 +163,7 @@ export const products = [
     oldPrice: null,
     rating: 4.9,
     reviewsCount: 95,
-    image: '/laptop.png',
+    image: '/TubesDesweb_B/laptop.png',
     description:
       `ACER NITRO V15 15 13420 RTX3050 6GB/ 16GB 512GB W11 15.6FHD
 

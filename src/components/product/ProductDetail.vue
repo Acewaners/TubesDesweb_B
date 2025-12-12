@@ -53,7 +53,7 @@ const goToProductReviews = () => {
 <template>
   <div class="max-w-6xl mx-auto px-4 md:px-6 lg:px-8 py-10">
     <!-- Breadcrumb -->
-    <nav class="text-xs text-gray-500 mb-4">
+    <nav class="text-xs md:text-sm text-gray-500 mb-4">
       <RouterLink to="/" class="hover:underline">Home</RouterLink>
       <span> / </span>
       <span>{{ breadcrumbCategory }}</span>
@@ -61,7 +61,7 @@ const goToProductReviews = () => {
       <span class="text-gray-900 font-medium">{{ product?.name }}</span>
     </nav>
 
-    <div v-if="product" class="grid grid-cols-1 md:grid-cols-2 gap-10">
+    <div v-if="product" class="grid grid-cols-1 sm:grid-cols-2 gap-10">
       <!-- Gambar -->
       <div class="space-y-4">
         <div class="bg-gray-100 rounded-xl flex items-center justify-center p-6">
@@ -71,56 +71,58 @@ const goToProductReviews = () => {
 
       <!-- Detail -->
       <div class="space-y-4">
-        <h1 class="text-2xl md:text-3xl font-bold text-gray-900">
+        <h1 class="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-gray-900">
           {{ product.name }}
         </h1>
 
-        <!-- Rating & review count -->
-        <div class="flex items-center justify-between gap-4">
-          <div class="flex items-center gap-2 text-sm text-gray-500">
+        <!-- Rating & review count (button compact on mobile, full text on larger screens) -->
+        <div class="flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2 text-xs sm:text-sm text-gray-500">
             <!-- Bintang -->
             <div class="flex items-center">
               <StarIcon
                 v-for="n in 5"
                 :key="n"
-                class="w-4 h-4"
+                class="w-3 h-3 sm:w-4 sm:h-4"
                 :class="n <= Math.round(averageRating) ? 'text-yellow-400' : 'text-gray-300'"
               />
             </div>
 
             <!-- Angka rating -->
-            <span>{{ averageRating.toFixed(1) }} • {{ reviewsCount }} Reviews</span>
+            <span class="ml-1">{{ averageRating.toFixed(1) }} • {{ reviewsCount }} Reviews</span>
           </div>
 
-          <!-- Tombol menuju halaman review -->
+          <!-- Compact button: icon-only on mobile, icon+text on sm+ -->
           <button
             type="button"
-            class="inline-flex items-center gap-2 rounded-full border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            class="inline-flex items-center gap-1 rounded-full border border-gray-200 px-2 py-1 text-xs sm:px-3 sm:py-1.5 sm:text-sm font-medium text-gray-700 hover:bg-gray-50 ml-3 whitespace-nowrap"
             @click="goToProductReviews"
           >
-            <ChatBubbleLeftRightIcon class="w-5 h-5" />
-            <span>See Reviews ({{ reviewsCount }})</span>
+            <ChatBubbleLeftRightIcon class="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+            <span class="hidden sm:inline whitespace-nowrap">See Reviews ({{ reviewsCount }})</span>
           </button>
         </div>
 
         <!-- Harga -->
         <div class="flex items-center gap-3">
-          <span class="text-2xl font-semibold text-red-500">
+          <span class="text-xl sm:text-2xl md:text-3xl font-semibold text-red-500">
             Rp. {{ product.price.toLocaleString('id-ID') }}
           </span>
 
           <span
             v-if="product.oldPrice"
-            class="text-gray-400 line-through text-lg"
+            class="text-gray-400 line-through text-sm sm:text-base md:text-lg"
           >
             Rp. {{ product.oldPrice.toLocaleString('id-ID') }}
           </span>
         </div>
 
         <!-- Deskripsi -->
-        <div class="prose prose-sm text-gray-700 whitespace-pre-line">
+        <div class="prose prose-sm md:prose-base text-xs sm:text-sm md:text-base text-gray-700 whitespace-pre-line">
           <p>{{ product.description }}</p>
         </div>
+
+        <!-- Removed mobile-only See Reviews button (now inline beside rating) -->
       </div>
     </div>
 

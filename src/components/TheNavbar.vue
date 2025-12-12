@@ -24,16 +24,22 @@ const router = useRouter()
 
 const isMobileMenuOpen = ref(false)
 
-// ----- Account dropdown (desktop) -----
+// ----- Account dropdown -----
 const isAccountMenuOpen = ref(false)
+const isMobileAccountMenuOpen = ref(false)
 const accountMenuRef = ref(null)
 
 const toggleMobileMenu = () => {
   isMobileMenuOpen.value = !isMobileMenuOpen.value
+  // Pastikan dropdown account selalu tertutup saat hamburger menu dibuka/ditutup
+  if (isMobileMenuOpen.value) {
+    isMobileAccountMenuOpen.value = false
+  }
 }
 
 const closeMobileMenu = () => {
   isMobileMenuOpen.value = false
+  isMobileAccountMenuOpen.value = false
 }
 
 const toggleAccountMenu = () => {
@@ -42,6 +48,14 @@ const toggleAccountMenu = () => {
 
 const closeAccountMenu = () => {
   isAccountMenuOpen.value = false
+}
+
+const toggleMobileAccountMenu = () => {
+  isMobileAccountMenuOpen.value = !isMobileAccountMenuOpen.value
+}
+
+const closeMobileAccountMenu = () => {
+  isMobileAccountMenuOpen.value = false
 }
 
 const handleClickOutside = (event) => {
@@ -63,13 +77,8 @@ onBeforeUnmount(() => {
 const handleLogout = () => {
   authLogout()
   isAccountMenuOpen.value = false
+  isMobileAccountMenuOpen.value = false
   router.push('/login')
-}
-
-// Mobile: klik icon orang → langsung ke halaman account
-const goToAccountMobile = () => {
-  closeMobileMenu()
-  router.push('/account')
 }
 </script>
 
@@ -309,15 +318,67 @@ const goToAccountMobile = () => {
               </span>
             </RouterLink>
 
-            <!-- Account mobile: langsung ke /account -->
-            <button
-              class="text-black hover:text-gray-600 transition-colors"
-              aria-label="Account"
-              type="button"
-              @click="goToAccountMobile"
-            >
-              <UserIcon class="w-6 h-6" />
-            </button>
+            <!-- Account mobile dropdown -->
+            <div class="relative">
+              <button
+                @click.stop="toggleMobileAccountMenu"
+                class="text-black hover:text-gray-600 transition-colors"
+                aria-label="Account"
+                type="button"
+              >
+                <UserIcon class="w-6 h-6" />
+              </button>
+
+              <div
+                v-if="isMobileAccountMenuOpen"
+                class="absolute -right-24 mt-3 w-48 bg-teal-500 text-white rounded-lg shadow-lg py-2 z-50"
+              >
+                <RouterLink
+                  to="/account"
+                  @click="closeMobileAccountMenu"
+                  class="flex items-center gap-2 px-3 py-2 hover:bg-teal-600 transition-colors text-sm"
+                >
+                  <UserIcon class="w-4 h-4 shrink-0" />
+                  <span class="font-medium">Manage Account</span>
+                </RouterLink>
+
+                <RouterLink
+                  to="/orders"
+                  @click="closeMobileAccountMenu"
+                  class="flex items-center gap-2 px-3 py-2 hover:bg-teal-600 transition-colors text-sm"
+                >
+                  <ShoppingBagIcon class="w-4 h-4 shrink-0" />
+                  <span class="font-medium">My Orders</span>
+                </RouterLink>
+
+                <RouterLink
+                  to="/cancellations"
+                  @click="closeMobileAccountMenu"
+                  class="flex items-center gap-2 px-3 py-2 hover:bg-teal-600 transition-colors text-sm"
+                >
+                  <NoSymbolIcon class="w-4 h-4 shrink-0" />
+                  <span class="font-medium">Cancellations</span>
+                </RouterLink>
+
+                <RouterLink
+                  to="/reviews"
+                  @click="closeMobileAccountMenu"
+                  class="flex items-center gap-2 px-3 py-2 hover:bg-teal-600 transition-colors text-sm"
+                >
+                  <StarIcon class="w-4 h-4 shrink-0" />
+                  <span class="font-medium">My Reviews</span>
+                </RouterLink>
+
+                <button
+                  type="button"
+                  @click="handleLogout"
+                  class="w-full flex items-center gap-2 px-3 py-2 hover:bg-teal-600 transition-colors text-left text-sm"
+                >
+                  <ArrowLeftOnRectangleIcon class="w-4 h-4 shrink-0" />
+                  <span class="font-medium">Logout</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

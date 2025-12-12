@@ -10,16 +10,13 @@ defineOptions({
 
 <template>
   <div class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-10 space-y-10">
-    <!-- Row: Contact Info Card + Contact Form -->
-    <div class="flex flex-col md:flex-row gap-8">
-      <!-- Left Side: Contact Info Card -->
-      <ContactInfoCard />
+    <!-- Contact Form (Top) -->
+    <ContactForm />
 
-      <!-- Right Side: Contact Form -->
-      <ContactForm />
-    </div>
+    <!-- Contact Info Card (Middle) -->
+    <ContactInfoCard />
 
-    <!-- Google Maps Section -->
+    <!-- Google Maps Section (Bottom) -->
     <ContactMap />
   </div>
 </template>

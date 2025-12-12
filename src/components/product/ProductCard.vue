@@ -159,11 +159,12 @@ const goToProductDetail = () => {
         {{ title }}
       </h3>
 
-      <div class="flex items-center gap-3">
-        <span class="text-red-500 font-semibold text-base md:text-lg">
+      <!-- Price Section: Desktop/Tablet horizontal, Mobile vertical -->
+      <div class="flex flex-col md:flex-row md:items-center gap-1 md:gap-3">
+        <span class="text-red-500 font-semibold text-lg md:text-lg sm:text-base">
           Rp. {{ Number(price).toLocaleString('id-ID') }}
         </span>
-        <span v-if="oldPrice" class="text-gray-400 line-through text-sm">
+        <span v-if="oldPrice" class="text-gray-400 line-through text-xs md:text-sm">
           Rp. {{ Number(oldPrice).toLocaleString('id-ID') }}
         </span>
       </div>

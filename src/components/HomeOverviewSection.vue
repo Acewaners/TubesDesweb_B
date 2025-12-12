@@ -88,7 +88,7 @@ const exploreProducts = computed(() =>
 
       <div class="mt-7 w-full flex justify-center">
         <RouterLink
-          :to="{ name: 'all-products' }"
+          :to="{ name: 'all-products', query: { category: 'Our Products' } }"
           class="bg-red-500 hover:bg-red-800 text-white px-6 md:px-8 py-2.5 md:py-3 rounded text-sm md:text-base font-medium transition-colors cursor-pointer"
         >
           View All Products

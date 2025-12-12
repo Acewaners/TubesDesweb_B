@@ -35,7 +35,7 @@ const handleRemove = (id) => {
   <div class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-10 space-y-4">
 
     <!-- Breadcrumb -->
-    <p class="text-xs text-gray-500">
+    <p class="text-xs md:text-sm text-gray-500">
       <RouterLink to="/" class="text-gray-400 hover:text-red-500 transition">
         Home
       </RouterLink>
@@ -44,17 +44,17 @@ const handleRemove = (id) => {
     </p>
 
     <!-- Heading -->
-    <h1 class="text-2xl md:text-3xl font-bold text-gray-900">My Wishlist</h1>
+    <h1 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900">My Wishlist</h1>
 
     <!-- EMPTY -->
     <div
       v-if="items.length === 0"
       class="bg-white rounded-xl shadow-sm border border-gray-100 p-6"
     >
-      <p class="text-sm text-gray-600 mb-1">
+      <p class="text-xs sm:text-sm text-gray-600 mb-1">
         You don't have a wishlist yet
       </p>
-      <RouterLink to="/" class="text-red-500 hover:underline text-sm">
+      <RouterLink to="/" class="text-red-500 hover:underline text-xs sm:text-sm">
         Shop Now!
       </RouterLink>
     </div>
@@ -67,25 +67,25 @@ const handleRemove = (id) => {
       <div
         v-for="item in items"
         :key="item.id"
-        class="flex items-center justify-between px-6 py-4 text-sm"
+        class="flex flex-col gap-3 px-4 sm:px-6 py-4 text-xs sm:text-sm md:text-base"
       >
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 sm:gap-3">
           <img
             :src="item.image"
             :alt="item.title"
-            class="w-12 h-12 md:w-14 md:h-14 object-contain"
+            class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 object-contain"
           />
 
           <div>
-            <p class="text-gray-800">{{ item.title }}</p>
-            <p class="text-gray-500">{{ formatCurrency(item.price) }}</p>
+            <p class="text-gray-800 text-xs sm:text-sm md:text-base font-medium">{{ item.title }}</p>
+            <p class="text-gray-500 text-xs sm:text-sm">{{ formatCurrency(item.price) }}</p>
           </div>
         </div>
 
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 sm:gap-3 ml-auto">
           <button
             type="button"
-            class="px-3 py-1.5 border border-gray-300 rounded text-xs md:text-sm text-gray-700 hover:bg-gray-100 transition"
+            class="px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded text-xs sm:text-sm md:text-base text-gray-700 hover:bg-gray-100 transition whitespace-nowrap"
             @click="handleAddToCart(item)"
           >
             Add to Cart
@@ -93,7 +93,7 @@ const handleRemove = (id) => {
 
           <button
             type="button"
-            class="px-3 py-1.5 border border-red-400 rounded text-xs md:text-sm text-red-500 hover:bg-red-50 transition"
+            class="px-2 sm:px-3 py-1 sm:py-1.5 border border-red-400 rounded text-xs sm:text-sm md:text-base text-red-500 hover:bg-red-50 transition whitespace-nowrap"
             @click="handleRemove(item.id)"
           >
             Remove

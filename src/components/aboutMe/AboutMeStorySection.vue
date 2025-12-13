@@ -20,7 +20,7 @@ defineOptions({
     </div>
 
     <!-- Right logo box (gradient abu ke putih) -->
-    <div class="flex justify-center md:justify-end">
+    <div class="hidden md:flex justify-center md:justify-end">
       <div
         class="w-full md:w-80 lg:w-96 h-56 md:h-72 lg:h-80 rounded-md shadow-sm
                bg-gradient-to-br from-gray-200 via-gray-100 to-white
@@ -29,7 +29,7 @@ defineOptions({
         <img
           src="@/assets/Ini-aku.jpg"
           alt="Ini Adalah Aku"
-          class="max-w-[80%] max-h-[80%] object-contain"
+          class="max-w-[80%] max-h-[80%] object-contain hidden sm:flex"
         />
       </div>
     </div>

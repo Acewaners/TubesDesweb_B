@@ -92,7 +92,7 @@ const router = createRouter({
     },
     {
       path: '/aboutme',
-      name: 'about me',
+      name: 'aboutme',
       component: AboutMeView,
     },
 

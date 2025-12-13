@@ -12,7 +12,7 @@ defineOptions({
         Our Story
       </h1>
       <p class="text-sm md:text-base text-gray-600 leading-relaxed">
-        Launched in 2025, Emotix is South Asia’s premier online shopping
+        Launched in 2025, Emotix is South Asia's premier online shopping
         marketplace with an active presence in multiple regions. Supported
         by a wide range of sellers and brands, we bring a smooth and secure
         online experience for electronics, gadgets, and more.
@@ -33,7 +33,7 @@ defineOptions({
       >
         <img
           src="@/assets/emotix-logo.png"
-          alt="Emotix Logo"
+          alt="Ini adalah logo emotix"
           class="max-w-[80%] max-h-[80%] object-contain"
         />
       </div>

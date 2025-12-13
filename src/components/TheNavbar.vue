@@ -10,7 +10,6 @@ import {
   ShoppingBagIcon,
   NoSymbolIcon,
   StarIcon,
-  ArrowLeftOnRectangleIcon,
 } from '@heroicons/vue/24/outline'
 import { cartItemCount } from '@/stores/cartStore'
 import { authState, logout as authLogout } from '@/stores/authStore'
@@ -114,7 +113,7 @@ const goToAccountMobile = () => {
               class="absolute left-0 right-0 -bottom-1 h-0.5 bg-black opacity-0 group-hover:opacity-100 transition-opacity"
             ></span>
           </RouterLink>
-          <RouterLink
+                    <RouterLink
             to="/aboutme"
             class="text-sm font-medium text-black hover:text-gray-600 transition-colors relative group"
           >
@@ -270,13 +269,6 @@ const goToAccountMobile = () => {
             class="text-sm font-medium text-black hover:text-gray-600 px-4 py-2 transition-colors"
           >
             About
-          </RouterLink>
-          <RouterLink
-            to="/aboutme"
-            @click="closeMobileMenu"
-            class="text-sm font-medium text-black hover:text-gray-600 px-4 py-2 transition-colors"
-          >
-            About Me
           </RouterLink>
 
           <!-- Sign Up mobile: hanya saat belum login -->
